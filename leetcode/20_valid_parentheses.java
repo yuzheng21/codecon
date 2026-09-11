@@ -1,4 +1,20 @@
 class Solution {
+    // solution1
+    public boolean isValid(String s) {
+        Deque<Character> stack = new ArrayDeque<>();
+        String left = "({[";
+        String right = ")}]";
+        for (char c : s.toCharArray()) {
+            if (left.indexOf(c) >= 0) {
+                stack.push(c);
+            } else {
+                if (stack.isEmpty()) return false;
+                if (left.indexOf(stack.pop()) != right.indexOf(c)) return false;
+            }
+        }
+        return stack.isEmpty();
+    }
+
     // another solution
     // stack store expected right part, instead of left
 
@@ -24,21 +40,5 @@ class Solution {
             }
         }
         return pos < 0;
-    }
-
-    // solution1
-    public boolean isValid(String s) {
-        Deque<Character> stack = new LinkedList<>();
-        String left = "({[";
-        String right = ")}]";
-        for (char c : s.toCharArray()) {
-            if (left.indexOf(c) >= 0) {
-                stack.push(c);
-            } else {
-                if (stack.isEmpty()) return false;
-                if (left.indexOf(stack.pop()) != right.indexOf(c)) return false;
-            }
-        }
-        return stack.isEmpty();
     }
 }

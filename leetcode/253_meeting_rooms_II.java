@@ -8,6 +8,60 @@
  * }
  */
 public class Solution {
+
+    // heap
+    public int minMeetingRooms(int[][] intervals) {
+        int num = 0;
+
+        Arrays.sort(intervals, (a, b) -> a[0] - b[0]);
+        // min heap to store ends
+        PriorityQueue<Integer> pq = new PriorityQueue<>();
+
+        for (int i = 0; i < intervals.length; i++) {
+            int[] cur = intervals[i];
+            // peek returns the minimum value
+            while (!pq.isEmpty() && pq.peek() <= cur[0]) {
+                pq.poll();
+            }
+
+            pq.offer(cur[1]);
+
+            num = Math.max(num, pq.size());
+        }
+
+        return num;
+    }
+
+    // sweep line
+    public int minMeetingRooms(int[][] intervals) {
+        int N = intervals.length;
+        int[] start = new int[N];
+        int[] end = new int[N];
+        
+        for (int i = 0; i < N; i++) {
+            start[i] = intervals[i][0];
+            end[i] = intervals[i][1];
+        }
+
+        Arrays.sort(start);
+        Arrays.sort(end);
+
+        int i = 0;
+        int j = 0;
+        int num = 0;
+
+        while (i < N && j < N) {
+            if (start[i] < end[j]) {
+                num = Math.max(num, i - j + 1);
+                i++;
+            } else {
+                j++;
+            }
+        }
+
+        return num;
+    }
+
     // heap
     // O(nlgn)
     public int minMeetingRooms(Interval[] intervals) {

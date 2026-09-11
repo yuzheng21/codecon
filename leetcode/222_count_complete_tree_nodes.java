@@ -8,20 +8,15 @@
  * }
  */
 class Solution {
-    // ignore complete tree condition
+    // O(n) - ignore complete tree condition
     public int countNodes(TreeNode root) {
         if (root == null) {
             return 0;
         }
-        if (root.val != Integer.MIN_VALUE) {
-            root.val = Integer.MIN_VALUE;
-            return 1 + countNodes(root.left) + countNodes(root.right);
-        } else {
-            return 0;
-        }
+        return 1 + countNodes(root.left) + countNodes(root.right);
     }
 
-    // O((lgn)^2)
+    // O((lgn)^2) - binary search in binary search
     public int countNodes(TreeNode root) {
         int h = height(root);
         return h < 0 ? 0
@@ -33,7 +28,7 @@ class Solution {
         return root == null ? -1 : 1 + height(root.left);
     }
 
-    // O((lgn)^2)
+    // O((lgn)^2) - binary search in binary search
     public int countNodes(TreeNode root) {
         if (root == null)
             return 0;

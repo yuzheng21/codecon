@@ -58,6 +58,65 @@ class Solution {
         return false;
     }
 
+    // BFS from start word
+    public int ladderLength(String beginWord, String endWord, List<String> wordList) {
+        Set<String> wordSet = new HashSet<>(wordList);
+
+        if (!wordSet.contains(endWord)) {
+            return 0;
+        }
+
+        Deque<String> queue = new ArrayDeque<>();
+        Set<String> visited = new HashSet<>();
+
+        queue.offer(beginWord);
+        visited.add(beginWord);
+
+        int step = 0;
+
+        while (!queue.isEmpty()) {
+            step++; // one step used to move to current words layer
+
+            // need to BFS layer by layer
+            int len = queue.size();
+            while (len > 0) {
+                len--;
+
+                String cur = queue.poll();
+
+                if (cur.equals(endWord)) {
+                    return step;
+                }
+
+                char[] word = cur.toCharArray();
+                for (int i = 0; i < word.length; i++) {
+                    char temp = word[i];
+                    for (int j = 'a'; j <= 'z'; j++) {
+                        if (temp == (char) j) {
+                            continue;
+                        }
+                        word[i] = (char) j;
+
+                        String nextWord = new String(word);
+                        if (!wordSet.contains(nextWord) || visited.contains(nextWord)) {
+                            continue;
+                        }
+                        if (nextWord.equals(endWord)) {
+                            return step + 1; // one step used to move to next word layer
+                        }
+
+                        visited.add(nextWord);
+                        queue.offer(nextWord);
+                    }
+                    word[i] = temp;
+                }
+            }
+        }
+
+        // no path
+        return 0;
+    }
+
     // solution1: bfs from start point
     public int ladderLength(String beginWord, String endWord, List<String> wordList) {
         Set<String> visited = new HashSet<>();

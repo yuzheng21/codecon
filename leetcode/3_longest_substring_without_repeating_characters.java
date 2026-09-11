@@ -1,5 +1,5 @@
 public class Solution {
-    // sliding window
+    // sliding window + count
     public int lengthOfLongestSubstring(String s) {
         int[] count = new int[256];
         int i = 0;
@@ -14,6 +14,33 @@ public class Solution {
             ret = Math.max(ret, j - i + 1);
         }
         return ret;
+    }
+
+    // sliding window + position
+    public int lengthOfLongestSubstring(String s) {
+        if (s == null || s.length() == 0) {
+            return 0;
+        } 
+
+        int max = 0;
+        Map<Character, Integer> map = new HashMap<>();
+
+        int p = 0;
+        int q = 0;
+        while (q < s.length()) {
+            if (map.containsKey(s.charAt(q))) {
+                int index = map.get(s.charAt(q)) + 1;
+                while (p < index) {
+                    map.remove(s.charAt(p));
+                    p++;
+                }
+            }
+            map.put(s.charAt(q), q);
+            max = Math.max(max, q - p + 1);
+            q++;
+        }
+
+        return max;
     }
 
     // greedy: if repeating appears in substring, then the parent string must contains repeating

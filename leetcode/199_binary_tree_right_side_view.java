@@ -9,6 +9,7 @@
  */
 class Solution {
     // dfs
+    // Identifying the first node encountered at each depth level during a right-to-left tree traversal.
     public List<Integer> rightSideView(TreeNode root) {
         List<Integer> ret = new ArrayList<>();
         dfs(root, 0, ret);

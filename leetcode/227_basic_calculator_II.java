@@ -1,5 +1,44 @@
 class Solution {
-    // solution3: no stack
+    // solution: one stack
+    public int calculate(String s) {
+        Deque<Integer> stack = new ArrayDeque<>();
+        int currentNumber = 0;
+        char operation = '+';
+        for (int i = 0; i < s.length(); i++) {
+            char c = s.charAt(i);
+            if (Character.isDigit(c)) {
+                currentNumber = currentNumber * 10 + (c - '0');
+            }
+
+            // skip trailing whitespace like "3/2 "
+            if (!Character.isDigit(c) && c != ' ' || i == s.length() - 1) {
+                if (operation == '+') {
+                    stack.push(currentNumber);
+                } else if (operation == '-') {
+                    stack.push(-currentNumber);
+                } else {
+                    // process * and / immediately
+                    int prevNumber = stack.pop();
+                    if (operation == '*') {
+                        stack.push(prevNumber * currentNumber);
+                    } else if (operation == '/') {
+                        stack.push(prevNumber / currentNumber);
+                    }
+                }
+
+                // reset state
+                currentNumber = 0;
+                operation = c;
+            }
+        }
+
+        int ret = 0;
+        while (!stack.isEmpty()) {
+            ret += stack.pop();
+        }
+
+        return ret;
+    }
 
     // solution2: one stack
     public int calculate(String s) {

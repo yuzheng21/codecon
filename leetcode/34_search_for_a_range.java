@@ -1,4 +1,50 @@
 public class Solution {
+    // solution4: binary search w/ lower & upper middle
+    public int[] searchRange(int[] nums, int target) {
+        int lower = findLowerBound(nums, target);
+        if (lower == -1) {
+            return new int[]{-1, -1};
+        }
+        int upper = findUpperBound(nums, target);
+        return new int[]{lower, upper};
+    }
+
+    private int findLowerBound(int[] nums, int target) {
+        int s = 0;
+        int e = nums.length - 1;
+        while (s < e) {
+            // lower middle
+            int m = s + (e - s) / 2;
+            if (nums[m] > target) {
+                e = m - 1;
+            } else if (nums[m] < target) {
+                s = m + 1;
+            } else {
+                e = m;
+            }
+        }
+
+        return s == e && nums[s] == target ? s : -1;
+    }
+
+    private int findUpperBound(int[] nums, int target) {
+        int s = 0;
+        int e = nums.length - 1;
+        while (s < e) {
+            // upper middle
+            int m = s + (e - s + 1) / 2;
+            if (nums[m] < target) {
+                s = m + 1;
+            } else if (nums[m] > target) {
+                e = m - 1;
+            } else {
+                s = m;
+            }
+        }
+
+        return s == e && nums[s] == target ? s : -1;
+    }
+    
     // solution3: combine common logic into finding ceiling
     public int[] searchRange(int[] nums, int target) {
         int[] ret = new int[]{-1, -1};

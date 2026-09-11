@@ -19,7 +19,7 @@ public class Solution {
         entry.remove(entry.size()-1);
     }
 
-    // solution 2
+    // solution 2 - collecting all subsets starting from s, i.e. {x >= s, x -> {1,2,3,s,...,n}}
     private void backtrace(List<List<Integer>> ret, List<Integer> entry, int[] nums, int start) {
         ret.add(new ArrayList<>(entry));
         for (int i = start; i < nums.length; i++) {

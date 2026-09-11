@@ -1,50 +1,83 @@
-/**
- * Definition for undirected graph.
- * class UndirectedGraphNode {
- *     int label;
- *     List<UndirectedGraphNode> neighbors;
- *     UndirectedGraphNode(int x) { label = x; neighbors = new ArrayList<UndirectedGraphNode>(); }
- * };
- */
-public class Solution {
+/*
+// Definition for a Node.
+class Node {
+    public int val;
+    public List<Node> neighbors;
+    public Node() {
+        val = 0;
+        neighbors = new ArrayList<Node>();
+    }
+    public Node(int _val) {
+        val = _val;
+        neighbors = new ArrayList<Node>();
+    }
+    public Node(int _val, ArrayList<Node> _neighbors) {
+        val = _val;
+        neighbors = _neighbors;
+    }
+}
+*/
+
+class Solution {
     // bfs
-    public UndirectedGraphNode cloneGraph(UndirectedGraphNode node) {
+    public Node cloneGraph(Node node) {
         if (node == null) {
             return null;
         }
-        Map<UndirectedGraphNode, UndirectedGraphNode> map = new HashMap<>();
-        Deque<UndirectedGraphNode> queue = new ArrayDeque<>();
-        Set<UndirectedGraphNode> done = new HashSet<>();
+
+        Deque<Node> queue = new ArrayDeque<>();
         queue.offer(node);
+
+        Set<Node> visited = new HashSet<>();
+        Map<Integer, Node> map = new HashMap<>();
+
         while (!queue.isEmpty()) {
-            UndirectedGraphNode cur = queue.poll();
-            if (done.contains(cur)) {
+            Node cur = queue.poll();
+            // check visited before node processing / cloning
+            // always make sure the node in the queue is not visited
+            // otherwise, the node neighbors could be added multiple times
+            if (visited.contains(cur)) {
                 continue;
             }
-            map.putIfAbsent(cur, new UndirectedGraphNode(cur.label));
-            UndirectedGraphNode copy = map.get(cur);
-            for (UndirectedGraphNode next : cur.neighbors) {
-                map.putIfAbsent(next, new UndirectedGraphNode(next.label));
-                copy.neighbors.add(map.get(next));
-                queue.offer(next);
+
+            // clone node
+            map.putIfAbsent(cur.val, new Node(cur.val));
+            Node clone = map.get(cur.val);
+
+            // clone neighbors
+            for (Node neighbor : cur.neighbors) {
+                map.putIfAbsent(neighbor.val, new Node(neighbor.val));
+                Node cloneNeighbor = map.get(neighbor.val);
+                // need to make sure the node (being cloned) is not visited previously
+                clone.neighbors.add(cloneNeighbor);
+
+                queue.offer(neighbor);
             }
-            done.add(cur);
+
+            visited.add(cur);
         }
-        return map.get(node);
+
+        return map.get(node.val);
     }
 
     // dfs
-    public UndirectedGraphNode cloneGraph(UndirectedGraphNode node) {
-        return cloneGraph(node, new HashMap<>());
-    }
+    // key -> original node, value -> clone node
+    private Map<Node, Node> map = new HashMap<>();
+    public Node cloneGraph(Node node) {
+        if (node == null) {
+            return null;
+        }
+        if (map.containsKey(node)) {
+            return map.get(node);
+        }
 
-    private UndirectedGraphNode cloneGraph(UndirectedGraphNode node, Map<UndirectedGraphNode, UndirectedGraphNode> map) {
-        if (node == null) return null;
-        if (map.containsKey(node)) return map.get(node);
-        UndirectedGraphNode clone = new UndirectedGraphNode(node.label);
+        // clone node
+        Node clone = new Node(node.val);
         map.put(node, clone);
-        for (UndirectedGraphNode neighbor : node.neighbors) {
-            clone.neighbors.add(cloneGraph(neighbor, map));
+
+        // clone neighbors recursively
+        for (Node neighbor : node.neighbors) {
+            clone.neighbors.add(cloneGraph(neighbor));
         }
         return clone;
     }

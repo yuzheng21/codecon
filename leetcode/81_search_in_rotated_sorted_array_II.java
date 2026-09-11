@@ -6,6 +6,7 @@ class Solution {
             int mid = s + (e - s) / 2;
             if (nums[mid] == target)
                 return true;
+            // compare mid and e to check flip point locates at which side
             if (nums[mid] > nums[e]) {
                 // flip point is at right part
                 if (nums[s] <= target && target < nums[mid]) {
@@ -21,7 +22,8 @@ class Solution {
                     e = mid - 1;
                 }
             } else {
-                if (nums[s] != nums[e]) { // optimization
+                // nums[mid] == nums[e]
+                if (nums[s] != nums[e]) { // optimization - optional
                     e = mid - 1;
                 } else {
                     e--;

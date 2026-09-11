@@ -39,4 +39,30 @@ public class Solution {
         int b = closestValue(kid, target);
         return Math.abs(a-target) < Math.abs(b-target) ? a : b;
     }
+
+    // iterative
+    public int closestValue(TreeNode root, double target) {
+        if (root == null) {
+            return -1;
+        }
+
+        int ret = root.val;
+        while (root != null) {
+            if (Math.abs(root.val - target) < Math.abs(ret - target)) {
+                ret = root.val;
+            } else if (Math.abs(root.val - target) == Math.abs(ret - target)) {
+                ret = Math.min(ret, root.val);
+            }
+            if (root.val == target) {
+                return root.val;
+            }
+            if (root.val < target) {
+                root = root.right;
+            } else {
+                root = root.left;
+            }
+        }
+
+        return ret;
+    }
 }

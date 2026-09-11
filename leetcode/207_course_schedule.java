@@ -1,4 +1,42 @@
 class Solution {
+    // bfs - topology sort - adj and indegree
+    public boolean canFinish(int numCourses, int[][] prerequisites) {
+        Map<Integer, List<Integer>> adj = new HashMap<>();
+        int[] indegree = new int[numCourses];
+
+        for (int[] prereq : prerequisites) {
+            adj.putIfAbsent(prereq[1], new ArrayList<>());
+            adj.get(prereq[1]).add(prereq[0]);
+
+            indegree[prereq[0]]++;
+        }
+
+        Deque<Integer> queue = new ArrayDeque<>();
+
+        for (int i = 0; i < numCourses; i++) {
+            if (indegree[i] == 0) {
+                queue.offer(i);
+            }
+        }
+
+        int visited = 0;
+
+        while (!queue.isEmpty()) {
+            int cur = queue.poll();
+            visited++;
+
+            if (adj.containsKey(cur)) {
+                for (int next : adj.get(cur)) {
+                    indegree[next]--;
+                    if (indegree[next] == 0) {
+                        queue.offer(next);
+                    }
+                }
+            }
+        }
+
+        return visited == numCourses;
+    }
 
     // solution2: constructing way
     public boolean canFinish(int numCourses, int[][] prerequisites) {

@@ -1,5 +1,6 @@
 class Solution {
     public int totalNQueens(int n) {
+        // use array as an pointer to a single integer
         int[] res = new int[]{0};
         // store valid queens in a map (array implementation)
         // key - row index, value - column index
